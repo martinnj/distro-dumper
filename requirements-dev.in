@@ -1,0 +1,3 @@
+pip-tools # For dependency pinning/management.
+pylint    # For.... Linting?
+-r requirements.txt

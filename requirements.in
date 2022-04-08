@@ -1,0 +1,2 @@
+cloudscraper # For downloading torrent files through cloudflare bot stuff.
+feedparser   # For RSS parsing
