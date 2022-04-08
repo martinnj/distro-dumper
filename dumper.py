@@ -122,7 +122,7 @@ def __dump() -> None:
 
     # Get all items from the feed and filter them for the relevant ones.
     pprint("Getting feed: %s" % __FEED_URL)
-    feed_items = __get_feed_items()
+    feed_items = [item for item in __get_feed_items()]
     items_before_filter = len(feed_items)
     feed_items = [item for item in feed_items if __feed_item_filter(item)]
     items_after_filter = len(feed_items)
