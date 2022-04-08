@@ -3,7 +3,7 @@ node ("docker") {
     def image = null
     stage("Git Pull") {
         // Get from github
-        git credentialsId: 'github_pk', url: "git@github.com:martinnj/distrowatch-dumper.git", branch: 'master'
+        git credentialsId: 'github_pk', url: "git@github.com:martinnj/distrowatch-dumper.git", branch: 'main'
     }
     stage("Configure") {
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' setup.py"
