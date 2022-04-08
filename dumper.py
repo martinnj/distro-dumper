@@ -122,12 +122,8 @@ def __dump() -> None:
 
     # Get all items from the feed and filter them for the relevant ones.
     pprint("Getting feed: %s" % __FEED_URL)
-    feed_items = [item for item in __get_feed_items()]
-    items_before_filter = len(feed_items)
+    feed_items = __get_feed_items()
     feed_items = [item for item in feed_items if __feed_item_filter(item)]
-    items_after_filter = len(feed_items)
-
-    pprint("Retrieved %i items. Filtered to %i." % (items_before_filter, items_after_filter))
 
     # Get any files in cache.
     cached_items = {
@@ -142,12 +138,10 @@ def __dump() -> None:
 
     # Start going through filtered items and work them over.
     for item in feed_items:
-        pprint("Checking against cache: %s" % filename)
+        filename, url = item
 
         # Only download items not already in cache.
-        filename, url = item
         if filename not in cached_items:
-        
             pprint("Downloading: %s" % filename)
 
             # Do the download!
