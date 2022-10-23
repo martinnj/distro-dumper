@@ -2,7 +2,8 @@
 
 
 # System imports.
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from types import ModuleType
 from typing import Tuple
 

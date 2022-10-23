@@ -40,7 +40,17 @@ variables.
 
 ### Debian
 
-TODO
+The Debian module only supports getting the "current" version, but supports many different
+architectures, flavors and media types. As long as they're available. :)
+
+- `DEBIAN_ARCHS` - Comma separated list of architechtures, supported architectures are:
+  `amd64`, `arm64`, `armel`, `armhf`, `i386`, `mips64el`, `mipsel`, `ppc64el` and `s390x`.
+- `DEBIAN_MEDIA` - Comma separated list of media types, available values are `cd` and `dvd`.
+- `DEBIAN_EXTRA_FLAVORS` - Comma separated list of flavors, valid flavors are `edu` and `mac`.
+   You cannot deselect the standard flavor at this time.
+
+Note that not all combinations of architectures, media formats and flavors are actually available,
+and as such will net get any downloads.
 
 
 ### Manjaro

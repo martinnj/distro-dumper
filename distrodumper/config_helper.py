@@ -14,6 +14,7 @@ from distrodumper import BaseModuleConfiguration
 from distrodumper.logging import get_logger
 
 from distrodumper.modules import arch as arch_module
+from distrodumper.modules import debian as debian_module
 from distrodumper.modules import example as example_module
 
 
@@ -33,6 +34,7 @@ _LOGGER: LoggerAdapter = get_logger("CONFIG_HELPER")
 __AVAILABLE_MODULES: dict[str, ModuleType] = {
     "arch": arch_module,
     "example": example_module,
+    "debian": debian_module
     # "manjaro": arch_module,
     # "raspberry_pi_os": arch_module,
 }

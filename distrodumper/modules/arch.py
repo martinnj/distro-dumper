@@ -93,7 +93,7 @@ class ArchWorker(BaseWorker):
 
         # Parse the HTML.
         _LOGGER.debug("Parsing HTML from release page.")
-        soup = BeautifulSoup(resp.text, 'html.parser')
+        soup = BeautifulSoup(resp.text, "html.parser")
         
         # Extract all the links from the HTML.
         links = []

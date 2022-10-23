@@ -89,7 +89,7 @@ def main() -> None:
 
         except Exception as exc:
             # Unplanned exceptions. Oh no!
-            _LOGGER.warning(f"An error occured during leech: {repr(exc)}")
+            _LOGGER.warning(f"An error occured during dump: {repr(exc)}")
             _LOGGER.warning("Retrying after next sleep.")
 
         finally:
