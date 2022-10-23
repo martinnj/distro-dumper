@@ -4,8 +4,12 @@
 #
 #    pip-compile requirements-dev.in
 #
-astroid==2.11.2
+astroid==2.12.12
     # via pylint
+beautifulsoup4==4.11.1
+    # via -r requirements.txt
+build==0.8.0
+    # via pip-tools
 certifi==2021.10.8
     # via
     #   -r requirements.txt
@@ -14,11 +18,11 @@ charset-normalizer==2.0.12
     # via
     #   -r requirements.txt
     #   requests
-click==8.1.2
+click==8.1.3
     # via pip-tools
 cloudscraper==1.2.60
     # via -r requirements.txt
-dill==0.3.4
+dill==0.3.5.1
     # via pylint
 feedparser==6.0.8
     # via -r requirements.txt
@@ -32,18 +36,21 @@ lazy-object-proxy==1.7.1
     # via astroid
 mccabe==0.7.0
     # via pylint
-pep517==0.12.0
-    # via pip-tools
-pip-tools==6.6.0
+packaging==21.3
+    # via build
+pep517==0.13.0
+    # via build
+pip-tools==6.9.0
     # via -r requirements-dev.in
-platformdirs==2.5.1
+platformdirs==2.5.2
     # via pylint
-pylint==2.13.5
+pylint==2.15.5
     # via -r requirements-dev.in
 pyparsing==3.0.7
     # via
     #   -r requirements.txt
     #   cloudscraper
+    #   packaging
 requests==2.27.1
     # via
     #   -r requirements.txt
@@ -57,11 +64,18 @@ sgmllib3k==1.0.0
     # via
     #   -r requirements.txt
     #   feedparser
+soupsieve==2.3.2.post1
+    # via
+    #   -r requirements.txt
+    #   beautifulsoup4
 tomli==2.0.1
     # via
+    #   build
     #   pep517
     #   pylint
-typing-extensions==4.1.1
+tomlkit==0.11.5
+    # via pylint
+typing-extensions==4.4.0
     # via
     #   astroid
     #   pylint
@@ -71,7 +85,7 @@ urllib3==1.26.9
     #   requests
 wheel==0.37.1
     # via pip-tools
-wrapt==1.14.0
+wrapt==1.14.1
     # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:

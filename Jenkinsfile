@@ -13,7 +13,7 @@ node ("docker") {
     stage("Build Docker Image") {
         // When using the extra arguments, we need to apply the final arguments
         // oursleves as well. Hence the " ." at the end.
-        image = docker.build("distrowatch-dumper:$VERSION_STRING", "--no-cache -f Dockerfile .")
+        image = docker.build("distro-dumper:$VERSION_STRING", "--no-cache -f Dockerfile .")
     }
     stage("Push") {
         docker.withRegistry("$REGISTRY_URL") {

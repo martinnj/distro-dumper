@@ -131,3 +131,6 @@ dmypy.json
 
 # Environment files
 .myenv
+
+# VS Code
+.vscode/*.json

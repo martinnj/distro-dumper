@@ -1,2 +1,3 @@
-cloudscraper # For downloading torrent files through cloudflare bot stuff.
-feedparser   # For RSS parsing
+beautifulsoup4 # For parsing HTML pages.
+cloudscraper   # For downloading torrent files through cloudflare bot stuff.
+feedparser     # For RSS parsing
