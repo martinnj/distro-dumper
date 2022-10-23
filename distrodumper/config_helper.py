@@ -29,6 +29,7 @@ _LOGGER: LoggerAdapter = get_logger("CONFIG_HELPER")
 
 # Formats available for download.
 # TODO: Find a better way to type the value.
+# TODO: Maybe this should just be dynamically loaded instead of mapped manually?
 __AVAILABLE_MODULES: dict[str, ModuleType] = {
     "arch": arch_module,
     "example": example_module,
@@ -186,7 +187,6 @@ def generate_from_environment() -> Configuration:
         raw_val = os.environ["DUMPER_INTERVAL"]
         conf.interval = int(raw_val)
         _LOGGER.debug(f"Setting \"interval\" = {conf.interval}")
-
 
     return conf
 
