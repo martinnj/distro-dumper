@@ -17,6 +17,7 @@ from distrodumper import BaseWorker
 from distrodumper import BaseModuleConfiguration
 from distrodumper import ModuleExternalError
 from distrodumper.logging import get_logger
+from distrodumper.validation import is_bool_string
 
 
 ####################################################################################################
@@ -28,8 +29,8 @@ from distrodumper.logging import get_logger
 
 # Environment-variable to validator mapping. (Optional variables)
 __OPTIONAL_VALIDATORS: dict[str, Callable] = {
-    "ARCH_GET_ALL": lambda val: isinstance(val, str) and val in {"true", "false"},
-    "ARCH_GET_AVAILABLE": lambda val: isinstance(val, str) and val in {"true", "false"},
+    "ARCH_GET_ALL": is_bool_string,
+    "ARCH_GET_AVAILABLE": is_bool_string,
 }
 
 # Release page url.

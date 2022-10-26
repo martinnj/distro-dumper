@@ -19,6 +19,7 @@ from distrodumper import BaseWorker
 from distrodumper import BaseModuleConfiguration
 from distrodumper import ModuleExternalError
 from distrodumper.logging import get_logger
+from distrodumper.validation import is_atomic_csv
 
 
 ####################################################################################################
@@ -42,13 +43,13 @@ __AVAILABLE_ARCHS = {
 
 # Environment-variable to validator mapping. (Required variables)
 __REQUIRED_VALIDATORS: dict[str, Callable] = {
-    "DEBIAN_ARCHS": lambda val: __is_arch_csv(val),
-    "DEBIAN_MEDIA": lambda val: __is_media_csv(val),
+    "DEBIAN_ARCHS": lambda val: is_atomic_csv(val, __AVAILABLE_ARCHS),
+    "DEBIAN_MEDIA": lambda val: is_atomic_csv(val, {"cd", "dvd"}),
 }
 
 # Environment-variable to validator mapping. (Optional variables)
 __OPTIONAL_VALIDATORS: dict[str, Callable] = {
-    "DEBIAN_EXTRA_FLAVORS": lambda val: isinstance(val, str) and val in {"edu", "mac"},
+    "DEBIAN_EXTRA_FLAVORS": lambda val: is_atomic_csv(val, {"edu", "mac"}),
 }
 
 # Format string for generating download URLs.
@@ -57,53 +58,6 @@ _TORRENT_URL_FORMAT = "https://cdimage.debian.org/debian-cd/current/{arch}/bt-{m
 # Logger to handle console out.
 _LOGGER: LoggerAdapter = get_logger("DEBIAN_MODULE")
 
-
-####################################################################################################
-###                                                                                              ###
-###                                        Helper Methods                                        ###
-###                                                                                              ###
-####################################################################################################
-
-
-def __is_arch_csv(val: Any) -> bool:
-    """
-    Checks if a value is a string containing a comma separated list fo valid Debian architechture
-    names.
-    Must contain at least one element.
-
-    ### Arguments
-    - val : Any
-      Any object to check.
-
-    ### Returns:
-    - bool: True if the value is a string containing a comma separated list of valid Debian
-            architechture names, with at least one element.
-    """
-    if not isinstance(val, str):
-        return False
-
-    formats = [format.strip() for format in val.split(",")]
-    return len(formats) > 0 and all([_format in __AVAILABLE_ARCHS for _format in formats])
-
-
-def __is_media_csv(val: Any) -> bool:
-    """
-    Checks if a value is a string containing a comma separated list fo valid Debian media types.
-    Must contain at least one element.
-
-    ### Arguments
-    - val : Any
-      Any object to check.
-
-    ### Returns:
-    - bool: True if the value is a string containing a comma separated list of valid Debian
-            media types, with at least one element.
-    """
-    if not isinstance(val, str):
-        return False
-
-    formats = [format.strip() for format in val.split(",")]
-    return len(formats) > 0 and all([_format in {"cd", "dvd"} for _format in formats])
 
 ####################################################################################################
 ###                                                                                              ###
