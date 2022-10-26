@@ -38,3 +38,35 @@ def is_bool_string(val: Any) -> bool:
     - bool: True of the value is a string containing either `true` or `false`.
     """
     return isinstance(val, str) and val.lower() in {"true", "false"}
+
+
+def is_non_empty_string(val: Any) -> bool:
+    """
+    Checks if a value is a non-empty string
+
+    ### Arguments
+    - val : Any
+      Any object to check.
+
+    ### Returns:
+    - bool: True if `val` was a string with at least one character, False otherwise.
+    """
+    return isinstance(val, str) and len(val) > 0
+
+
+def is_non_zero_int(val: Any) -> bool:
+    """
+    Checks if a value is an integer > 0 or a string containing an integer > 0.
+
+    ### Arguments
+    - val : Any
+      Any object to check.
+
+    ### Returns:
+    - bool: True if `val` was an integer > 0 or a string containing an integer > 0, False otherwise.
+    """
+    return not isinstance(val, bool) \
+        and (
+                (isinstance(val, int) and val > 0) \
+                or (isinstance(val, str) and val.isdigit() and int(val) > 0)
+        )

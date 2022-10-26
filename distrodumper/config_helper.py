@@ -21,6 +21,8 @@ from distrodumper.modules import example
 
 from distrodumper.validation import is_atomic_csv
 from distrodumper.validation import is_bool_string
+from distrodumper.validation import is_non_empty_string
+from distrodumper.validation import is_non_zero_int
 
 
 ####################################################################################################
@@ -50,46 +52,11 @@ __REQUIRED_VALIDATORS: dict[str, Callable] = {
 
 # Environment-variable to validator mapping. (Optional variables)
 __OPTIONAL_VALIDATORS: dict[str, Callable] = {
-    "DUMPER_CACHE": lambda val: __is_nonempty_string(val) and os.path.isdir(val),
+    "DUMPER_CACHE": lambda val: is_non_empty_string(val) and os.path.isdir(val),
     "DUMPER_DEBUG": is_bool_string,
-    "DUMPER_DIRECTORY": lambda val: __is_nonempty_string(val) and os.path.isdir(val),
-    "DUMPER_INTERVAL": lambda val: __is_non_zero_int(val),
+    "DUMPER_DIRECTORY": lambda val: is_non_empty_string(val) and os.path.isdir(val),
+    "DUMPER_INTERVAL": lambda val: is_non_zero_int(val),
 }
-
-
-####################################################################################################
-###                                                                                              ###
-###                                        Helper Methods                                        ###
-###                                                                                              ###
-####################################################################################################
-
-
-def __is_nonempty_string(val: Any) -> bool:
-    """
-    Checks if a value is a non-empty string
-
-    ### Arguments
-    - val : Any
-      Any object to check.
-
-    ### Returns:
-    - bool: True if `val` was a string with at least one character, False otherwise.
-    """
-    return isinstance(val, str) and len(val) > 0
-
-
-def __is_non_zero_int(val: Any) -> bool:
-    """
-    Checks if a value is an integer > 0 or a string containing an integer > 0.
-
-    ### Arguments
-    - val : Any
-      Any object to check.
-
-    ### Returns:
-    - bool: True if `val` was an integer > 0 or a string containing an integer > 0, False otherwise.
-    """
-    return isinstance(val, int) or (isinstance(val, str) and val.isdigit() and int(val) > 0)
 
 
 ####################################################################################################
