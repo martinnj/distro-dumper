@@ -10,6 +10,11 @@ node ("docker") {
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' dumper.py"
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' Dockerfile"
     }
+    stage("Static Analysis") {
+        /*node("python-tox") {
+            // TODO: Do linting and type-checking.
+        }*/
+    }
     stage("Build Docker Image") {
         // When using the extra arguments, we need to apply the final arguments
         // oursleves as well. Hence the " ." at the end.
