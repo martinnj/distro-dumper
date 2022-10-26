@@ -7,15 +7,17 @@ from logging import LoggerAdapter
 from types import ModuleType
 from typing import Any
 from typing import Callable
+from typing import Type
 
 # Custom imports.
 from distrodumper import Configuration
+from distrodumper import BaseHelper
 from distrodumper import BaseModuleConfiguration
 from distrodumper.logging import get_logger
 
-from distrodumper.modules import arch as arch_module
-from distrodumper.modules import debian as debian_module
-from distrodumper.modules import example as example_module
+from distrodumper.modules import arch
+from distrodumper.modules import debian
+from distrodumper.modules import example
 
 from distrodumper.validation import is_atomic_csv
 from distrodumper.validation import is_bool_string
@@ -32,12 +34,11 @@ from distrodumper.validation import is_bool_string
 _LOGGER: LoggerAdapter = get_logger("CONFIG_HELPER")
 
 # Formats available for download.
-# TODO: Find a better way to type the value.
 # TODO: Maybe this should just be dynamically loaded instead of mapped manually?
-__AVAILABLE_MODULES: dict[str, ModuleType] = {
-    "arch": arch_module,
-    "example": example_module,
-    "debian": debian_module
+__AVAILABLE_MODULES: dict[str, Type[BaseHelper]] = {
+    "arch": arch.ArchHelper,
+    "example": example.ExampleHelper,
+    "debian": debian.DebianHelper
     # "manjaro": arch_module,
     # "raspberry_pi_os": arch_module,
 }
@@ -75,26 +76,6 @@ def __is_nonempty_string(val: Any) -> bool:
     - bool: True if `val` was a string with at least one character, False otherwise.
     """
     return isinstance(val, str) and len(val) > 0
-
-
-def __is_module_csv(val: Any) -> bool:
-    """
-    Checks if a value is a string containing a comma separated list fo valid module names.
-    Must contain at least one element.
-
-    ### Arguments
-    - val : Any
-      Any object to check.
-
-    ### Returns:
-    - bool: True if the value is a string containing a comma separated list of valid formats, with
-            at least one element.
-    """
-    if not isinstance(val, str):
-        return False
-
-    formats = [format.strip() for format in val.split(",")]
-    return len(formats) > 0 and all([_format in __AVAILABLE_MODULES for _format in formats])
 
 
 def __is_non_zero_int(val: Any) -> bool:
@@ -232,8 +213,8 @@ def populate_module_configurations(config: Configuration) -> None:
     # Loop over all the requested modules.
     for module_name in config.requested_modules:
         # Fetch the module and generate configuration.
-        module = __AVAILABLE_MODULES[module_name]
-        module_config = module.generate_from_environment()
+        module_helper = __AVAILABLE_MODULES[module_name]
+        module_config = module_helper.generate_from_environment()
 
         # Assign module & configuration into the program configuration.
-        config.modules[module_name] = (module_config, module)
+        config.modules[module_name] = (module_config, module_helper)

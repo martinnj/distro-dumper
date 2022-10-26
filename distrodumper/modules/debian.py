@@ -15,7 +15,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Custom imports.
-from distrodumper import BaseWorker
+from distrodumper import BaseHelper, BaseWorker
 from distrodumper import BaseModuleConfiguration
 from distrodumper import ModuleExternalError
 from distrodumper.logging import get_logger
@@ -29,7 +29,7 @@ from distrodumper.validation import is_atomic_csv
 ####################################################################################################
 
 # Known architechtures from Debian.
-__AVAILABLE_ARCHS = {
+_AVAILABLE_ARCHS = {
     "amd64",
     "arm64",
     "armel",
@@ -42,13 +42,13 @@ __AVAILABLE_ARCHS = {
 }
 
 # Environment-variable to validator mapping. (Required variables)
-__REQUIRED_VALIDATORS: dict[str, Callable] = {
-    "DEBIAN_ARCHS": lambda val: is_atomic_csv(val, __AVAILABLE_ARCHS),
+_REQUIRED_VALIDATORS: dict[str, Callable] = {
+    "DEBIAN_ARCHS": lambda val: is_atomic_csv(val, _AVAILABLE_ARCHS),
     "DEBIAN_MEDIA": lambda val: is_atomic_csv(val, {"cd", "dvd"}),
 }
 
 # Environment-variable to validator mapping. (Optional variables)
-__OPTIONAL_VALIDATORS: dict[str, Callable] = {
+_OPTIONAL_VALIDATORS: dict[str, Callable] = {
     "DEBIAN_EXTRA_FLAVORS": lambda val: is_atomic_csv(val, {"edu", "mac"}),
 }
 
@@ -119,8 +119,8 @@ class DebianWorker(BaseWorker):
 
                 # Extract all the links from the HTML.
                 links = []
-                for link in soup.find_all('a'):
-                    links.append(link.get('href'))
+                for link in soup.find_all("a"):
+                    links.append(link.get("href"))
                 _LOGGER.debug(f"Extracted {len(links)} links from the {arch}-{media} index.")
         
                 # Filter so we only kep release links.
@@ -172,86 +172,86 @@ class DebianWorker(BaseWorker):
 
         return result
 
-####################################################################################################
-###                                                                                              ###
-###                                        Public Methods                                        ###
-###                                                                                              ###
-####################################################################################################
+
+class DebianHelper(BaseHelper):
+    """ Debian module helper class. """
+
+    @staticmethod
+    def verify_config() -> bool:
+        """
+        Verifies that the environment has been configured correctly.
+        A correct configuration requires:
+        - All required environment variables are present.
+        - All required environment variables hold sensible values. 
+        - Optional environment variables that have been provided contain sensible values.
+
+        ### Returns:
+        - bool: True of the environment holds a valid configuration, False otherwise.
+        """
+        
+        # Initialize to true, we assume the best of everyone. <3
+        valid = True
+        env = os.environ
+
+        # Check required configuration values first.
+        for var_name, validator in _REQUIRED_VALIDATORS.items():
+            if var_name not in env:
+                _LOGGER.error(f"Required environment variable {var_name} was not configured.")
+                valid = False
+            elif not validator(env[var_name]):
+                _LOGGER.error(
+                    f"Required environment variable {var_name} had an invalid value: {env[var_name]}"
+                )
+                valid = False
+
+        # Check optional configuration values only if they are present.
+        for var_name, validator in _OPTIONAL_VALIDATORS.items():
+            if var_name in env and not validator(env[var_name]):
+                _LOGGER.error(
+                    f"Optional environment variable {var_name} had an invalid value: {env[var_name]}"
+                )
+                valid = False
+
+        # Return validity
+        return valid
 
 
-def verify_config() -> bool:
-    """
-    Verifies that the environment has been configured correctly.
-    A correct configuration requires:
-    - All required environment variables are present.
-    - All required environment variables hold sensible values. 
-    - Optional environment variables that have been provided contain sensible values.
+    @staticmethod
+    def generate_from_environment() -> DebianConfiguration:
+        """
+        Generate a module configuration from the environment variables.
 
-    ### Returns:
-    - bool: True of the environment holds a valid configuration, False otherwise.
-    """
-    
-    # Initialize to true, we assume the best of everyone. <3
-    valid = True
-    env = os.environ
+        ### Returns:
+        - DebianConfiguration: The generated configuration.
+        """
+        requested_archs = [arch.strip() for arch in os.environ["DEBIAN_ARCHS"].split(",")]
+        requested_media = [media.strip() for media in os.environ["DEBIAN_MEDIA"].split(",")]
 
-    # Check required configuration values first.
-    for var_name, validator in __REQUIRED_VALIDATORS.items():
-        if var_name not in env:
-            _LOGGER.error(f"Required environment variable {var_name} was not configured.")
-            valid = False
-        elif not validator(env[var_name]):
-            _LOGGER.error(
-                f"Required environment variable {var_name} had an invalid value: {env[var_name]}"
-            )
-            valid = False
+        # Assemple the configuration object.
+        conf = DebianConfiguration(
+            requested_archs=requested_archs,
+            requested_media=requested_media
+        )
 
-    # Check optional configuration values only if they are present.
-    for var_name, validator in __OPTIONAL_VALIDATORS.items():
-        if var_name in env and not validator(env[var_name]):
-            _LOGGER.error(
-                f"Optional environment variable {var_name} had an invalid value: {env[var_name]}"
-            )
-            valid = False
+        # Add any optional configuration keys that are present.
+        if "DEBIAN_EXTRA_FLAVORS" in os.environ:
+            raw_val = os.environ["DEBIAN_EXTRA_FLAVORS"]
+            conf.extra_flavors = [flavor.strip() for flavor in raw_val.split(",")]
+            _LOGGER.debug(f"Setting \"extra_flavors\" = {conf.extra_flavors}")
 
-    # Return validity
-    return valid
+        return conf
 
 
-def generate_from_environment() -> DebianConfiguration:
-    """
-    Generate a module configuration from the environment variables.
+    @staticmethod
+    def create_worker(config: DebianConfiguration) -> DebianWorker:
+        """
+        Creates an Debian worker from a suitable configuration dataclass.
 
-    ### Returns:
-    - DebianConfiguration: The generated configuration.
-    """
-    requested_archs = [arch.strip() for arch in os.environ["DEBIAN_ARCHS"].split(",")]
-    requested_media = [media.strip() for media in os.environ["DEBIAN_MEDIA"].split(",")]
+        ### Arguments
+        - config : DebianConfiguration
+        Configuration to give the worker.
 
-    # Assemple the configuration object.
-    conf = DebianConfiguration(
-        requested_archs=requested_archs,
-        requested_media=requested_media
-    )
-
-    # Add any optional configuration keys that are present.
-    if "DEBIAN_EXTRA_FLAVORS" in os.environ:
-        raw_val = os.environ["DEBIAN_EXTRA_FLAVORS"]
-        conf.extra_flavors = [flavor.strip() for flavor in raw_val.split(",")]
-        _LOGGER.debug(f"Setting \"extra_flavors\" = {conf.extra_flavors}")
-
-    return conf
-
-
-def create_worker(config: DebianConfiguration) -> DebianWorker:
-    """
-    Creates an Debian worker from a suitable configuration dataclass.
-
-    ### Arguments
-    - config : DebianConfiguration
-      Configuration to give the worker.
-
-    ### Returns:
-    - DebianWorker: A fully configured, and thus, functional worker.
-    """
-    return DebianWorker(config)
+        ### Returns:
+        - DebianWorker: A fully configured, and thus, functional worker.
+        """
+        return DebianWorker(config)

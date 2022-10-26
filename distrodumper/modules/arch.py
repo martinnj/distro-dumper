@@ -13,7 +13,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Custom imports.
-from distrodumper import BaseWorker
+from distrodumper import BaseHelper, BaseWorker
 from distrodumper import BaseModuleConfiguration
 from distrodumper import ModuleExternalError
 from distrodumper.logging import get_logger
@@ -28,7 +28,7 @@ from distrodumper.validation import is_bool_string
 
 
 # Environment-variable to validator mapping. (Optional variables)
-__OPTIONAL_VALIDATORS: dict[str, Callable] = {
+_OPTIONAL_VALIDATORS: dict[str, Callable] = {
     "ARCH_GET_ALL": is_bool_string,
     "ARCH_GET_AVAILABLE": is_bool_string,
 }
@@ -98,8 +98,8 @@ class ArchWorker(BaseWorker):
         
         # Extract all the links from the HTML.
         links = []
-        for link in soup.find_all('a'):
-            links.append(link.get('href'))
+        for link in soup.find_all("a"):
+            links.append(link.get("href"))
         _LOGGER.debug(f"Extracted {len(links)} links from the release page.")
 
         # Filter so we only kep release links.
@@ -155,76 +155,76 @@ class ArchWorker(BaseWorker):
 
         return result
 
-####################################################################################################
-###                                                                                              ###
-###                                        Public Methods                                        ###
-###                                                                                              ###
-####################################################################################################
+
+class ArchHelper(BaseHelper):
+    """ Arch module helper class. """
+
+    @staticmethod
+    def verify_config() -> bool:
+        """
+        Verifies that the environment has been configured correctly.
+        A correct configuration requires:
+        - All required environment variables are present.
+        - All required environment variables hold sensible values. 
+        - Optional environment variables that have been provided contain sensible values.
+
+        ### Returns:
+        - bool: True of the environment holds a valid configuration, False otherwise.
+        """
+        
+        # Initialize to true, we assume the best of everyone. <3
+        valid = True
+        env = os.environ
+
+        # Check optional configuration values only if they are present.
+        for var_name, validator in _OPTIONAL_VALIDATORS.items():
+            if var_name in env and not validator(env[var_name]):
+                _LOGGER.error(
+                    f"Optional environment variable {var_name} had an invalid value: {env[var_name]}"
+                )
+                valid = False
+
+        # Return validity
+        return valid
 
 
-def verify_config() -> bool:
-    """
-    Verifies that the environment has been configured correctly.
-    A correct configuration requires:
-    - All required environment variables are present.
-    - All required environment variables hold sensible values. 
-    - Optional environment variables that have been provided contain sensible values.
+    @staticmethod
+    def generate_from_environment() -> ArchConfiguration:
+        """
+        Generate a module configuration from the environment variables.
 
-    ### Returns:
-    - bool: True of the environment holds a valid configuration, False otherwise.
-    """
-    
-    # Initialize to true, we assume the best of everyone. <3
-    valid = True
-    env = os.environ
+        ### Returns:
+        - ArchConfiguration: The generated configuration.
+        """
 
-    # Check optional configuration values only if they are present.
-    for var_name, validator in __OPTIONAL_VALIDATORS.items():
-        if var_name in env and not validator(env[var_name]):
-            _LOGGER.error(
-                f"Optional environment variable {var_name} had an invalid value: {env[var_name]}"
-            )
-            valid = False
+        module_config = ArchConfiguration()
 
-    # Return validity
-    return valid
+        # Get everything?
+        if "ARCH_GET_ALL" in os.environ:
+            raw_val = os.environ["ARCH_GET_ALL"]
+            module_config.get_all = raw_val == "true"
+            _LOGGER.debug(f"Setting \"get_all\" = {module_config.get_all}")
 
+        # Get just those with webseeds?
+        if "ARCH_GET_AVAILABLE" in os.environ:
+            raw_val = os.environ["ARCH_GET_AVAILABLE"]
+            module_config.get_available = raw_val == "true"
+            _LOGGER.debug(f"Setting \"get_available\" = {module_config.get_all}")
+            _LOGGER.warning("ARCH_GET_AVAILABLE is not implemented.")
 
-def generate_from_environment() -> ArchConfiguration:
-    """
-    Generate a module configuration from the environment variables.
-
-    ### Returns:
-    - ArchConfiguration: The generated configuration.
-    """
-
-    module_config = ArchConfiguration()
-
-    # Get everything?
-    if "ARCH_GET_ALL" in os.environ:
-        raw_val = os.environ["ARCH_GET_ALL"]
-        module_config.get_all = raw_val == "true"
-        _LOGGER.debug(f"Setting \"get_all\" = {module_config.get_all}")
-
-    # Get just those with webseeds?
-    if "ARCH_GET_AVAILABLE" in os.environ:
-        raw_val = os.environ["ARCH_GET_AVAILABLE"]
-        module_config.get_available = raw_val == "true"
-        _LOGGER.debug(f"Setting \"get_available\" = {module_config.get_all}")
-        _LOGGER.warning("ARCH_GET_AVAILABLE is not implemented.")
-
-    return module_config
+        return module_config
 
 
-def create_worker(config: ArchConfiguration) -> ArchWorker:
-    """
-    Creates an Arch Linux worker from a suitable configuration dataclass.
+    @staticmethod
+    def create_worker(config: ArchConfiguration) -> ArchWorker:
+        """
+        Creates an Arch Linux worker from a suitable configuration dataclass.
 
-    ### Arguments
-    - config : ArchConfiguration
-      Configuration to give the worker.
+        ### Arguments
+        - config : ArchConfiguration
+        Configuration to give the worker.
 
-    ### Returns:
-    - ArchWorker: A fully configured, and thus, functional worker.
-    """
-    return ArchWorker(config)
+        ### Returns:
+        - ArchWorker: A fully configured, and thus, functional worker.
+        """
+        return ArchWorker(config)

@@ -7,8 +7,9 @@ from logging import LoggerAdapter
 # 3rd-party imports.
 
 # Custom imports.
-from distrodumper import BaseWorker
+from distrodumper import BaseHelper
 from distrodumper import BaseModuleConfiguration
+from distrodumper import BaseWorker
 from distrodumper.logging import get_logger
 
 
@@ -29,12 +30,15 @@ _LOGGER: LoggerAdapter = get_logger("EXAMPLE_MODULE")
 ###                                                                                              ###
 ####################################################################################################
 
+
+
+
+
 @dataclass
 class ExampleConfiguration(BaseModuleConfiguration):
     """
     Module specific configuration object for the Example module.
     """
-
 
 
 class ExampleWorker(BaseWorker):
@@ -61,47 +65,47 @@ class ExampleWorker(BaseWorker):
         return dict()
 
 
-####################################################################################################
-###                                                                                              ###
-###                                        Public Methods                                        ###
-###                                                                                              ###
-####################################################################################################
-
-
-def verify_config() -> bool:
-    """
-    Verifies that the environment has been configured correctly.
-    A correct configuration requires:
-    - All required environment variables are present.
-    - All required environment variables hold sensible values. 
-    - Optional environment variables that have been provided contain sensible values.
-
-    ### Returns:
-    - bool: True of the environment holds a valid configuration, False otherwise.
-    """
+class ExampleHelper(BaseHelper):
+    """ Example module helper class. """
     
-    return True
+
+    @staticmethod
+    def verify_config() -> bool:
+        """
+        Verifies that the environment has been configured correctly.
+        A correct configuration requires:
+        - All required environment variables are present.
+        - All required environment variables hold sensible values. 
+        - Optional environment variables that have been provided contain sensible values.
+
+        ### Returns:
+        - bool: True of the environment holds a valid configuration, False otherwise.
+        """
+        
+        return True
 
 
-def generate_from_environment() -> ExampleConfiguration:
-    """
-    Generate a module configuration from the environment variables.
+    @staticmethod
+    def generate_from_environment() -> ExampleConfiguration:
+        """
+        Generate a module configuration from the environment variables.
 
-    ### Returns:
-    - ExampleConfiguration: The generated configuration.
-    """
-    return ExampleConfiguration()
+        ### Returns:
+        - ExampleConfiguration: The generated configuration.
+        """
+        return ExampleConfiguration()
 
 
-def create_worker(config: ExampleConfiguration) -> ExampleWorker:
-    """
-    Creates an Example worker from a suitable configuration dataclass.
+    @staticmethod
+    def create_worker(config: ExampleConfiguration) -> ExampleWorker:
+        """
+        Creates an Example worker from a suitable configuration dataclass.
 
-    ### Arguments
-    - config : ExampleConfiguration
-      Configuration to give the worker.
+        ### Arguments
+        - config : ExampleConfiguration
+        Configuration to give the worker.
 
-    ### Returns:
-    - ExampleWorker: A fully configured, and thus, functional worker.
-    """
-    return ExampleWorker(config)
+        ### Returns:
+        - ExampleWorker: A fully configured, and thus, functional worker.
+        """
+        return ExampleWorker(config)
