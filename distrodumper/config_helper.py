@@ -17,6 +17,9 @@ from distrodumper.modules import arch as arch_module
 from distrodumper.modules import debian as debian_module
 from distrodumper.modules import example as example_module
 
+from distrodumper.validation import is_atomic_csv
+from distrodumper.validation import is_bool_string
+
 
 ####################################################################################################
 ###                                                                                              ###
@@ -41,13 +44,13 @@ __AVAILABLE_MODULES: dict[str, ModuleType] = {
 
 # Environment-variable to validator mapping. (Required variables)
 __REQUIRED_VALIDATORS: dict[str, Callable] = {
-    "DUMPER_MODULES": lambda val: __is_module_csv(val),
+    "DUMPER_MODULES": lambda val: is_atomic_csv(val, {k for k in __AVAILABLE_MODULES.keys()}),
 }
 
 # Environment-variable to validator mapping. (Optional variables)
 __OPTIONAL_VALIDATORS: dict[str, Callable] = {
     "DUMPER_CACHE": lambda val: __is_nonempty_string(val) and os.path.isdir(val),
-    "DUMPER_DEBUG": lambda val: isinstance(val, str) and val in {"true", "false"},
+    "DUMPER_DEBUG": is_bool_string,
     "DUMPER_DIRECTORY": lambda val: __is_nonempty_string(val) and os.path.isdir(val),
     "DUMPER_INTERVAL": lambda val: __is_non_zero_int(val),
 }
