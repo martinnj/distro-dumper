@@ -24,9 +24,11 @@ def is_atomic_csv(val: Any, atoms: Collection[str]) -> bool:
     values = [value.strip() for value in val.split(",")]
     return len(values) > 0 and all([value in atoms for value in values])
 
+
 def is_bool_string(val: Any) -> bool:
     """
     Checks if a given value is a string containing either the word `true` or `false`.
+    Case-insensitive.
 
     ### Arguments
     - val : Any
@@ -35,4 +37,4 @@ def is_bool_string(val: Any) -> bool:
     ### Returns:
     - bool: True of the value is a string containing either `true` or `false`.
     """
-    return isinstance(val, str) and val in {"true", "false"}
+    return isinstance(val, str) and val.lower() in {"true", "false"}

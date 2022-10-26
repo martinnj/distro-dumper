@@ -1,6 +1,6 @@
 # Distro Dumper
 
-Simple Python script and Docker container to automatically dump Linux/BSD torrents from
+Overengineered Python script and Docker container to automatically dump Linux/BSD torrents from
 various sources.
 
 
