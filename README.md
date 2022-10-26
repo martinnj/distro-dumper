@@ -76,6 +76,8 @@ I've only tested with Python 3.9, but some earlier and all later versions should
 - Install dependencies: `$ pip install -r requirements-dev.txt`.
 - Go ham. :)
 
+**TODO**: Add instructions for tox?
+
 ### Dependency pinning
 
 Dependencies are pinned with `pip-tools`. So any changes should be done via the `.in` files, and
