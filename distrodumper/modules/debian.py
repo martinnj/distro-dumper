@@ -123,7 +123,7 @@ class DebianWorker(BaseWorker):
                     links.append(link.get("href"))
                 _LOGGER.debug(f"Extracted {len(links)} links from the {arch}-{media} index.")
         
-                # Filter so we only kep release links.
+                # Filter so we only keep release links.
                 _candidates = self._get_download_links(arch, media, links)
                 _LOGGER.debug(f"Filtered to {len(_candidates)} candidates from the release page.")
 
