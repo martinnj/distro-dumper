@@ -83,7 +83,7 @@ class ManjaroWorker(BaseWorker):
 
     def dump(self) -> dict[str,str]:
         """
-        Debian dump worker.
+        Manjaro dump worker.
 
         ### Returns:
         - dict[str,str]: A dictionary with keyed by filenames, and valued with URLs for the
@@ -104,7 +104,7 @@ class ManjaroWorker(BaseWorker):
             error_message = f"Unable to get index from \"{index_url}\": {repr(exc)}"
             _LOGGER.error(error_message, exc_info=exc)
             raise ModuleExternalError(
-                f"Debian module couldn't fetch the Manjaro index."
+                f"Manjaro module couldn't fetch the Manjaro index."
             )
         
         # Parse the index page to find our torrent links.
@@ -219,7 +219,7 @@ class ManjaroHelper(BaseHelper):
         Generate a module configuration from the environment variables.
 
         ### Returns:
-        - DebianConfiguration: The generated configuration.
+        - ManjaroConfiguration: The generated configuration.
         """
         requested_flavors = [flavor.strip() for flavor in os.environ["MANJARO_FLAVORS"].split(",")]
 
