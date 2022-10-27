@@ -19,6 +19,7 @@ from distrodumper.modules import arch
 from distrodumper.modules import debian
 from distrodumper.modules import example
 from distrodumper.modules import manjaro
+from distrodumper.modules import rpios
 
 from distrodumper.validation import is_atomic_csv
 from distrodumper.validation import is_bool_string
@@ -42,8 +43,8 @@ __AVAILABLE_MODULES: dict[str, Type[BaseHelper]] = {
     "arch": arch.ArchHelper,
     "example": example.ExampleHelper,
     "debian": debian.DebianHelper,
-    "manjaro": manjaro.ManjaroHelper
-    # "raspberry_pi_os": arch_module,
+    "manjaro": manjaro.ManjaroHelper,
+    "raspberry_pi_os": rpios.RPiOsHelper,
 }
 
 # Environment-variable to validator mapping. (Required variables)

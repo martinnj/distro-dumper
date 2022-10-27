@@ -64,7 +64,11 @@ Arm support is not implemented yet.
 
 ### Raspberry Pi OS
 
-TODO
+The Raspbery Pi OS module supports the arm and x86 releases.
+The `oldstable` releases are not supported.
+
+- `RPIOS_IMAGES` - Comma separated list of flavors, valid flavors are `raspios_armhf`,
+  `raspios_full_armhf`, `raspios_lite_armhf`, `raspios_arm64`, `raspios_lite_arm64` and `rpd_x86`.
 
 
 ## Development
