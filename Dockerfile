@@ -1,4 +1,4 @@
-FROM python:3.10-alpine3.16
+FROM python:3.11-alpine3.16
 
 LABEL maintainer="hello@martinnj.dk"
 LABEL version="###VERSION###"
@@ -19,6 +19,7 @@ RUN addgroup -g 998 -S appgroup && \
 # Copy our files.
 WORKDIR /app
 COPY --chown=appuser:appgroup dumper.py /app/dumper.py
+COPY --chown=appuser:appgroup distrodumper /app/distrodumper
 COPY --chown=appuser:appgroup requirements.txt /app/requirements.txt
 
 # Prepare cache and dump mountpoints.
