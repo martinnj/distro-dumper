@@ -65,24 +65,21 @@ node ("python3") {
             excludes: "__pycache__"
         )
     }
-    node("docker") {
-        stage("Unstash") {
-            // Unstash the Docker image requisites.
-            unstash(name: "docker-application")
-        }
-        stage("Build Docker Image") {
-            // When using the extra arguments, we need to apply the final arguments
-            // oursleves as well. Hence the " ." at the end.
-            image = docker.build("distro-dumper:$VERSION_STRING", "--no-cache -f Dockerfile .")
-        }
-        stage("Push") {
-            docker.withRegistry("$REGISTRY_URL") {
-                image.push()
-                image.push("latest")
-            }
-        }
-        stage("Clean") {
-            cleanWs()
+}
+node("docker") {
+    stage("Unstash") {
+        // Unstash the Docker image requisites.
+        unstash(name: "docker-application")
+    }
+    stage("Build Docker Image") {
+        // When using the extra arguments, we need to apply the final arguments
+        // oursleves as well. Hence the " ." at the end.
+        image = docker.build("distro-dumper:$VERSION_STRING", "--no-cache -f Dockerfile .")
+    }
+    stage("Push") {
+        docker.withRegistry("$REGISTRY_URL") {
+            image.push()
+            image.push("latest")
         }
     }
     stage("Tag") {
