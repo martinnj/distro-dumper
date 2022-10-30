@@ -103,7 +103,7 @@ class RPiOsWorker(BaseWorker):
             raise ModuleExternalError(
                 f"Raspberry Pi OS module couldn't fetch the index."
             )
-        
+
         # Parse the index page to find our torrent links.
         _LOGGER.debug("Parsing HTML from index page.")
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -154,13 +154,13 @@ class RPiOsHelper(BaseHelper):
         Verifies that the environment has been configured correctly.
         A correct configuration requires:
         - All required environment variables are present.
-        - All required environment variables hold sensible values. 
+        - All required environment variables hold sensible values.
         - Optional environment variables that have been provided contain sensible values.
 
         ### Returns:
         - bool: True of the environment holds a valid configuration, False otherwise.
         """
-        
+
         # Initialize to true, we assume the best of everyone. <3
         valid = True
         env = os.environ

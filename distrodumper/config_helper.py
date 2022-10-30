@@ -73,13 +73,13 @@ def verify_environment() -> bool:
     Verifies that the environment has been configured correctly.
     A correct configuration requires:
     - All required environment variables are present.
-    - All required environment variables hold sensible values. 
+    - All required environment variables hold sensible values.
     - Optional environment variables that have been provided contain sensible values.
 
     ### Returns:
     - bool: True of the environment holds a valid configuration, False otherwise.
     """
-    
+
     # Initialize to true, we assume the best of everyone. <3
     valid = True
     env = os.environ
@@ -157,7 +157,7 @@ def verify_module_environments(config: Configuration) -> bool:
     ### Returns:
     - bool: True if all requested modules was satisfied, False otherwise.
     """
-    
+
     # Initialize to true, we assume the best of everyone. <3
     valid = True
 

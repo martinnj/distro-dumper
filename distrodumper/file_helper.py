@@ -94,5 +94,5 @@ def download(config: Configuration, filename: str, url: str) -> bool:
             os.remove(dump_filepath)
         return False
 
-    # Wohooo, done.    
+    # Wohooo, done.
     return True

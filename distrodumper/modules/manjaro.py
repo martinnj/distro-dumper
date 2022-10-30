@@ -106,7 +106,7 @@ class ManjaroWorker(BaseWorker):
             raise ModuleExternalError(
                 f"Manjaro module couldn't fetch the Manjaro index."
             )
-        
+
         # Parse the index page to find our torrent links.
         _LOGGER.debug("Parsing HTML from index page.")
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -179,13 +179,13 @@ class ManjaroHelper(BaseHelper):
         Verifies that the environment has been configured correctly.
         A correct configuration requires:
         - All required environment variables are present.
-        - All required environment variables hold sensible values. 
+        - All required environment variables hold sensible values.
         - Optional environment variables that have been provided contain sensible values.
 
         ### Returns:
         - bool: True of the environment holds a valid configuration, False otherwise.
         """
-        
+
         # Initialize to true, we assume the best of everyone. <3
         valid = True
         env = os.environ

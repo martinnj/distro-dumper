@@ -112,7 +112,7 @@ class DebianWorker(BaseWorker):
                     raise ModuleExternalError(
                         f"Debian module couldn't fetch the {arch}-{media} index"
                     )
-                
+
                 # Parse the index page to find our torrent links.
                 _LOGGER.debug("Parsing HTML from index page.")
                 soup = BeautifulSoup(resp.text, "html.parser")
@@ -122,7 +122,7 @@ class DebianWorker(BaseWorker):
                 for link in soup.find_all("a"):
                     links.append(link.get("href"))
                 _LOGGER.debug(f"Extracted {len(links)} links from the {arch}-{media} index.")
-        
+
                 # Filter so we only keep release links.
                 _candidates = self._get_download_links(arch, media, links)
                 _LOGGER.debug(f"Filtered to {len(_candidates)} candidates from the release page.")
@@ -182,13 +182,13 @@ class DebianHelper(BaseHelper):
         Verifies that the environment has been configured correctly.
         A correct configuration requires:
         - All required environment variables are present.
-        - All required environment variables hold sensible values. 
+        - All required environment variables hold sensible values.
         - Optional environment variables that have been provided contain sensible values.
 
         ### Returns:
         - bool: True of the environment holds a valid configuration, False otherwise.
         """
-        
+
         # Initialize to true, we assume the best of everyone. <3
         valid = True
         env = os.environ

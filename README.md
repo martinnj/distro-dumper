@@ -15,7 +15,7 @@ used to control the image and script. Defaults are for the Docker image only.
 - `DUMPER_CACHE` - Default: `/cache` - Directory to stash cache data in, usually just the torrent
   files before they're copied to the dump directory.
 - `DUMPER_DEBUG` - If set to `"true"`, will enable additional output.
-- `DUMPER_MODULES` - Comma-separated list of dumper modules to load. 
+- `DUMPER_MODULES` - Comma-separated list of dumper modules to load.
 - `<MODULE>_<SETTING>` - Proposed settings format for specific dumper modules.
 
 

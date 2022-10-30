@@ -84,7 +84,7 @@ class BaseHelper:
         Verifies that the environment has been configured correctly.
         A correct configuration requires:
         - All required environment variables are present.
-        - All required environment variables hold sensible values. 
+        - All required environment variables hold sensible values.
         - Optional environment variables that have been provided contain sensible values.
 
         ### Returns:

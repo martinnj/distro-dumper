@@ -67,7 +67,7 @@ class ExampleWorker(BaseWorker):
 
 class ExampleHelper(BaseHelper):
     """ Example module helper class. """
-    
+
 
     @staticmethod
     def verify_config() -> bool:
@@ -75,13 +75,13 @@ class ExampleHelper(BaseHelper):
         Verifies that the environment has been configured correctly.
         A correct configuration requires:
         - All required environment variables are present.
-        - All required environment variables hold sensible values. 
+        - All required environment variables hold sensible values.
         - Optional environment variables that have been provided contain sensible values.
 
         ### Returns:
         - bool: True of the environment holds a valid configuration, False otherwise.
         """
-        
+
         return True
 
 

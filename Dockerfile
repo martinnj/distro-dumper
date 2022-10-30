@@ -7,7 +7,7 @@ LABEL version="###VERSION###"
 USER root
 
 # Update any OS packages.
-RUN apk update --no-cache 
+RUN apk update --no-cache
 
 # Update pip
 RUN pip3 install --upgrade --no-cache-dir pip wheel
