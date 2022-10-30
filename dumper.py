@@ -22,7 +22,7 @@ from distrodumper.logging import get_logger
 __VERSION__ = "###VERSION###"
 
 _LOGGER: LoggerAdapter = get_logger("DISTRODUMPER")
-_CONFIG: Configuration
+
 
 
 def main() -> None:
@@ -36,19 +36,18 @@ def main() -> None:
         _LOGGER.critical("Invalid configuration detected, please reconfigure.")
         sys.exit(1)
 
-    # Get the basic configuration and apply it to the global scope.
-    global _CONFIG
+    # Get the basic configuration
     _LOGGER.debug("Constructing basic program configuration.")
-    _CONFIG = config_helper.generate_from_environment()
+    app_config: Configuration = config_helper.generate_from_environment()
 
     # Have each module verify that they can be configured correctly.
     _LOGGER.debug("Verifying configured module envrionements.")
-    if not config_helper.verify_module_environments(_CONFIG):
+    if not config_helper.verify_module_environments(app_config):
         _LOGGER.critical("A module reported an invalid configuration, please check the log.")
 
     # Configure each requested module.
     _LOGGER.debug("Constructing selected module configurations.")
-    config_helper.populate_module_configurations(_CONFIG)
+    config_helper.populate_module_configurations(app_config)
 
     # `while True:` is dirty, but honestly. It works for things like this, that has no ochestration
     # and is supposed to run forever.
@@ -56,11 +55,11 @@ def main() -> None:
     while True:
         try:
             # Get cached files.
-            cached_files = file_helper.get_files_in_cache(_CONFIG)
+            cached_files = file_helper.get_files_in_cache(app_config)
 
             _LOGGER.info("Running selected dumps.")
             # Loop over all the configured modules.
-            for module_name, (module_config, module) in _CONFIG.modules.items():
+            for module_name, (module_config, module) in app_config.modules.items():
                 # Create the worker and run it!
                 _LOGGER.debug(f"Creating & running worker for module: {module_name}")
                 worker = module.create_worker(module_config)
@@ -75,7 +74,7 @@ def main() -> None:
 
                 errors = 0
                 for filename, url in candidates.items():
-                    if not file_helper.download(_CONFIG, filename, url):
+                    if not file_helper.download(app_config, filename, url):
                         errors -=- 1
 
                 _LOGGER.info(f"{module_name}: Downloaded: {len(candidates) - errors}")
@@ -93,8 +92,8 @@ def main() -> None:
             _LOGGER.warning("Retrying after next sleep.")
 
         finally:
-            _LOGGER.info(f"Sleeping for {_CONFIG.interval} seconds.")
-            sleep(_CONFIG.interval)
+            _LOGGER.info(f"Sleeping for {app_config.interval} seconds.")
+            sleep(app_config.interval)
 
 if __name__ == "__main__":
     main()
