@@ -97,6 +97,8 @@ def main() -> None:
             _LOGGER.info("Keyboard interrupt recieved, shutting down.")
             sys.exit(0)
 
+        # Catching broadly because we want to catch everything and write it out without crashing.
+        # pylint: disable-next=broad-except
         except Exception as exc:
             # Unplanned exceptions. Oh no!
             _LOGGER.warning(f"An error occured during dump: {repr(exc)}")
