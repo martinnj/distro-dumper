@@ -3,7 +3,7 @@ node ("python3") {
     def image = null
     stage("Git Pull") {
         // Get from github
-        git credentialsId: "github_pk", url: "git@github.com:martinnj/distrowatch-dumper.git", branch: "main"
+        git credentialsId: "github_pk", url: "git@github.com:martinnj/distro-dumper.git", branch: "main"
     }
     stage("Configure") {
         // Set version in relevant files.
