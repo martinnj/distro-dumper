@@ -78,9 +78,9 @@ def main() -> None:
                     if not file_helper.download(_CONFIG, filename, url):
                         errors -=- 1
 
-                _LOGGER.info(
-                    f"{module_name}: S:{len(candidates) - errors} R:{removed} E:{errors}"
-                )
+                _LOGGER.info(f"{module_name}: Downloaded: {len(candidates) - errors}")
+                _LOGGER.info(f"{module_name}: Duplicate: {removed}")
+                _LOGGER.info(f"{module_name}: Errors: {errors}")
 
         except KeyboardInterrupt:
             # Keyboard interrupts are likely debugging, just exit.
