@@ -1,6 +1,7 @@
-pip-tools # For dependency pinning/management.
-pylint    # For.... Linting?
-pytest    # For testing! Soon^TM?
-tox       # For testing in more versions!
-tox-pyenv # For getting python versions from pyenv.
+pip-tools  # For dependency pinning/management.
+pylint     # For.... Linting?
+pytest     # For testing!
+pytest-cov # For getting copverage of testing!
+tox        # For testing in more versions!
+tox-pyenv  # For getting python versions from pyenv.
 -r requirements.txt
