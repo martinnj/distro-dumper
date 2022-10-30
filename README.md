@@ -80,7 +80,16 @@ I've only tested with Python 3.9, but some earlier and all later versions should
 - Install dependencies: `$ pip install -r requirements-dev.txt`.
 - Go ham. :)
 
-**TODO**: Add instructions for tox?
+### Testing & Linting
+
+Testing and linting is done through `tox` environments, make sure you have tox installed and run any
+of the environments:
+
+- `tox -e py39` - Runs the package tests with Python 3.9.
+- `tox -e py310` - Runs the package tests with Python 3.10.
+- `tox -e py311` - Runs the package tests with Python 3.11.
+- `tox -e lint` - Runs pylint and outputs the result.
+- `tox -e cov` - Runs the package tests with the code coverage analysis.
 
 ### Dependency pinning
 

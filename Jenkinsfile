@@ -1,19 +1,75 @@
-node ("docker") {
+node ("python3") {
     VERSION_STRING="$MAJOR_VERSION.$MINOR_VERSION.$BUILD_NUMBER"
     def image = null
     stage("Git Pull") {
         // Get from github
-        git credentialsId: 'github_pk', url: "git@github.com:martinnj/distrowatch-dumper.git", branch: 'main'
+        git credentialsId: "github_pk", url: "git@github.com:martinnj/distrowatch-dumper.git", branch: "main"
     }
     stage("Configure") {
+        // Set version in relevant files.
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' setup.py"
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' dumper.py"
         sh "sed -i 's/###VERSION###/$VERSION_STRING/g' Dockerfile"
+
+        // Create dir to pick up analysis reports.
+        sh "mkdir reports"
     }
     stage("Static Analysis") {
-        /*node("python-tox") {
-            // TODO: Do linting and type-checking.
-        }*/
+        withPythonEnv("/home/jenkins/.pyenv/shims/python3.9") {
+            sh "python --version"
+            sh "pip --version"
+            sh "pip install -r requirements-dev.txt"
+            sh "tox -e lint || true"
+            // TODO: sh "tox -e typecheck"
+
+            // Publish pylint results.
+            def checkstyle = scanForIssues(
+                blameDisabled: true,
+                forensicsDisabled: true,
+                sourceDirectory: ".",
+                tool: pyLint(pattern: "reports/pylint.log")
+            )
+            publishIssues issues: [checkstyle]
+        }
+    }
+    stage("Testing") {
+        // TODO: This is really ugly. >_< I would love for "withPythonEnv" to discover pyenv itself.
+        parallel py39: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.9") {
+                sh "python --version && pip --version"
+                sh "pip install --upgrade pip tox"
+                sh "tox -e cov"
+                // Publist test & coverage reports.
+                junit("reports/xunit.xml")
+                cobertura coberturaReportFile: "reports/cov.xml"
+            }
+        }, py310: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.10") {
+                sh "python --version && pip --version"
+                sh "pip install --upgrade pip tox"
+                sh "tox -e py310"
+            }
+        }, py311: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
+                sh "python --version && pip --version"
+                sh "pip install --upgrade pip tox"
+                sh "tox -e py311"
+            }
+        }
+    }
+    stage("Stash") {
+        // Stash the files we need to build the Docker image.
+        stash(
+            name: "docker-application",
+            includes: ".dockerignore, Dockerfile, dumper.py, requirements.txt, distrodumper/**",
+            excludes: "__pycache__"
+        )
+    }
+}
+node("docker") {
+    stage("Unstash") {
+        // Unstash the Docker image requisites.
+        unstash(name: "docker-application")
     }
     stage("Build Docker Image") {
         // When using the extra arguments, we need to apply the final arguments
@@ -27,7 +83,7 @@ node ("docker") {
         }
     }
     stage("Tag") {
-        sshagent(['github_pk']) {
+        sshagent(["github_pk"]) {
             sh "git tag -a v$VERSION_STRING -m \"Tagged by $BUILD_URL\""
             sh "git push --tags"
         }
