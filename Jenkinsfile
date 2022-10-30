@@ -19,7 +19,7 @@ node ("python3") {
             sh "python --version"
             sh "pip --version"
             sh "pip install -r requirements-dev.txt"
-            sh "tox -e lint || true"
+            sh "tox -e lint > reports/pylint.log || true"
             // TODO: sh "tox -e typecheck"
 
             // Publish pylint results.
