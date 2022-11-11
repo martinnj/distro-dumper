@@ -158,12 +158,22 @@ class DebianWorker(BaseWorker):
                 continue
 
             # Extract match groups, we don't use them all, but sscchhh.
-            flavor, major, minor, patch, arch = match.groups()
+            flavor, major, minor, patch, link_arch = match.groups()
 
             # If we haven't requested this particular flavor, skip.
             if isinstance(flavor, str) \
                and len(flavor) > 0 \
                and flavor not in self.config.extra_flavors:
+                continue
+
+            # If we didn't request this particular arch, something is weird.
+            if link_arch.lower() != arch.lower():
+                _LOGGER.warning(
+                    "Found an unexpected arch in a link.\n" + \
+                    f"    Expected arch: {arch}" + \
+                    f"    Found arch: {link_arch}" + \
+                    f"    Link: {link}"
+                )
                 continue
 
             # Assemble a URL for the file.
