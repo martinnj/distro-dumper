@@ -134,3 +134,7 @@ dmypy.json
 
 # VS Code
 .vscode/*.json
+
+# Don't pick up the sonar scanner things.
+sonar.sh
+.scannerwork
