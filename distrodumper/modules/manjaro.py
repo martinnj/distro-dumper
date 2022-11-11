@@ -137,7 +137,7 @@ class ManjaroWorker(BaseWorker):
         """
         # Compile a regex that can match the torrent filenames and get any relevant information
         # from them.
-        regex = re.compile(r"^https:\/\/download\.manjaro\.org\/([\w\d]+)\/(\d+)\.(\d+)\.(\d+)\/manjaro-([\w\d]+)-(\d+)\.(\d+)\.(\d+)-(\d+)-([\w\d]+).iso.torrent$")
+        regex = re.compile(r"^https:\/\/download\.manjaro\.org\/([\w]+)\/(\d+)\.(\d+)\.(\d+)\/manjaro-([\w]+)-(\d+)\.(\d+)\.(\d+)-(\d+)-([\w]+).iso.torrent$")
         result = dict()
         for link in links:
 
