@@ -37,7 +37,7 @@ node ("python3") {
         parallel py39: {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.9") {
                 sh "python --version && pip --version"
-                sh "pip install --upgrade pip tox"
+                sh "pip install --upgrade pip \"tox<4.0.0\""
                 sh "tox -e cov"
                 // Publist test & coverage reports.
                 junit("reports/xunit.xml")
@@ -46,13 +46,13 @@ node ("python3") {
         }, py310: {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.10") {
                 sh "python --version && pip --version"
-                sh "pip install --upgrade pip tox"
+                sh "pip install --upgrade pip \"tox<4.0.0\""
                 sh "tox -e py310"
             }
         }, py311: {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
                 sh "python --version && pip --version"
-                sh "pip install --upgrade pip tox"
+                sh "pip install --upgrade pip \"tox<4.0.0\""
                 sh "tox -e py311"
             }
         }
