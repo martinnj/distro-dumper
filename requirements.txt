@@ -12,7 +12,7 @@ charset-normalizer==2.0.12
     # via requests
 cloudscraper==1.2.60
     # via -r requirements.in
-feedparser==6.0.8
+feedparser==6.0.10
     # via -r requirements.in
 idna==3.3
     # via requests
@@ -28,5 +28,5 @@ sgmllib3k==1.0.0
     # via feedparser
 soupsieve==2.3.2.post1
     # via beautifulsoup4
-urllib3==1.26.9
+urllib3==1.26.13
     # via requests
