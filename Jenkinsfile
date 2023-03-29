@@ -83,11 +83,10 @@ node("docker") {
         }
     }
     stage("Tag") {
-        // TODO: Tagging doesn't work for now. Probably an issuer with the new agent container.
-        // sshagent(["github_pk"]) {
-        //     sh "git tag -a v$VERSION_STRING -m \"Tagged by $BUILD_URL\""
-        //     sh "git push --tags"
-        // }
+        sshagent(["github_pk"]) {
+            sh "git tag -a v$VERSION_STRING -m \"Tagged by $BUILD_URL\""
+            sh "git push --tags"
+        }
     }
     stage("Clean") {
         cleanWs()
