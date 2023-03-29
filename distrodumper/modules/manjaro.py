@@ -137,18 +137,39 @@ class ManjaroWorker(BaseWorker):
         """
         # Compile a regex that can match the torrent filenames and get any relevant information
         # from them.
-        regex = re.compile(r"^https:\/\/download\.manjaro\.org\/([\w]+)\/(\d+)\.(\d+)\.(\d+)\/manjaro-([\w]+)-(\d+)\.(\d+)\.(\d+)-(\d+)-([\w]+).iso.torrent$")
+        official_regex = re.compile(r"^https:\/\/download\.manjaro\.org\/([\w]+)\/(\d+)\.(\d+)\.(\d+)\/manjaro-([\w]+)-(\d+)\.(\d+)\.(\d+)(-minimal)*-(\d+)-([\w]+).iso.torrent$")
+        community_regex = re.compile(r"^https:\/\/download\.manjaro\.org\/([\w]+)\/(\d+)\.(\d+)\/manjaro-([\w]+)-(\d+)\.(\d+)(-minimal)*-(\d+)-([\w]+).iso.torrent$")
+
         result = dict()
         for link in links:
 
-            # Search each link using the regex.
-            match = regex.search(link)
-            if not match:
-                continue
+            if link.endswith(".torrent"):
+                print(link)
 
-            # Extract match groups, we don't use them all, but sscchhh.
-            flavor, major, minor, patch, flavor_2, major_2, minor_2, patch_2, date, linux = match.groups()
+            # Search each link using the regex'.
+            match = official_regex.search(link)
+            if match:
+                # Extract match groups, we don't use them all, but sscchhh.
+                flavor, major, minor, patch, \
+                flavor_2, major_2, minor_2, patch_2, \
+                minimal, date, linux = match.groups()
+            else:
+                # No official match, let's try the community regex instead.
+                match = community_regex.search(link)
 
+                if not match:
+                    # Still no match, skiiip.
+                    continue
+
+                # Try to extract relevant fields again, even the ones we don't use.
+                flavor, major, minor, \
+                flavor_2, major_2, minor_2, \
+                minimal, date, linux = match.groups()
+                # To avoid undeclared variables, just fill these with None. Ugly but works for now.
+                patch = patch_2 = None
+
+            # Check for weird/inconsistent fields.
+            # This would likely mean the regex broke, not that the link is bad.
             if flavor != flavor_2 \
                 or major != major_2 \
                 or minor != minor_2 \
