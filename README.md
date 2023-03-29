@@ -59,7 +59,8 @@ The Manjaro module supports the official and community flavors.
 Arm support is not implemented yet.
 
 - `MANJARO_FLAVORS` - Comma separated list of flavors, valid flavors are `kde`, `xfce`, `gnome`,
-  `budgie`, `cinnamon`, `i3` and `mate`,
+  `budgie`, `cinnamon`, `i3` and `mate`.
+  Note that Sway and Docker is not supported as they are external links.
 
 
 ### Raspberry Pi OS
