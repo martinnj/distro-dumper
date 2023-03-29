@@ -139,7 +139,7 @@ class Configuration:
     # Module related.
     requested_modules: list[str]
     modules: dict[str, Tuple[BaseModuleConfiguration, Type[BaseHelper]]] \
-        = field(default_factory=lambda: dict())
+        = field(default_factory=lambda: {})
 
     # Basic configuration.
     cache_dir: str = "/cache"

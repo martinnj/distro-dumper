@@ -81,8 +81,8 @@ class ProgressAdapter(logging.LoggerAdapter):
         as intended.
 
         ### Returns:
-        - str: A string with the formatted progress indicator, or an empty string if the progress tuple
-            was missing or malformed.
+        - str: A string with the formatted progress indicator, or an empty string if the progress
+               tuple was missing or malformed.
         """
 
         if isinstance(progress, tuple) and len(progress) == 2:
@@ -90,7 +90,7 @@ class ProgressAdapter(logging.LoggerAdapter):
             total = progress[1]
             if isinstance(current, int) and isinstance(total, int):
                 current_padded = ("%0" + str(len(str(total))) + "i") % current
-                return "[%s/%s] " % (current_padded, total)
+                return f"[{current_padded}/{total}] "
 
         # Return nothing otherwise.
         return ""

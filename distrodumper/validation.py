@@ -22,7 +22,7 @@ def is_atomic_csv(val: Any, atoms: Collection[str]) -> bool:
         return False
 
     values = [value.strip() for value in val.split(",")]
-    return len(values) > 0 and all([value in atoms for value in values])
+    return len(values) > 0 and all(value in atoms for value in values)
 
 
 def is_bool_string(val: Any) -> bool:

@@ -57,6 +57,21 @@ def get_files_in_cache(config: Configuration) -> set[str]:
 
 
 def download(config: Configuration, filename: str, url: str) -> bool:
+    """
+    Download a file from a specified url to a specified filename.
+    The directory the file will be placed in is pulled from the supplied Configuration object.
+
+    ### Arguments
+    - config : Configuration
+      An initialized configuration object that can supply the cache- and dump-directories to use.
+    - filename : str
+      The name of the file to download the data into.
+    - url : str
+      The url to fetch the file data from.
+
+    ### Returns:
+    - bool: `True` if the download succedded, `False` otherwise.
+    """
 
     # Calculate the target paths.
     cache_filepath = os.path.join(os.path.abspath(config.cache_dir), filename)
@@ -67,13 +82,15 @@ def download(config: Configuration, filename: str, url: str) -> bool:
         # Open a file handle and download the file to cache.
         with open(cache_filepath, "wb") as f_obj:
             # Send the request for the file and raise an exception if we don't get HTTP 200.
-            resp = requests.get(url, allow_redirects=True)
+            resp = requests.get(url, allow_redirects=True, timeout=(15,15))
             resp.raise_for_status()
 
             # Write the response contents to the file.
             _LOGGER.debug(f"File-length: {len(resp.content)}")
             f_obj.write(resp.content)
 
+    # We actually want to catch everything so we can clean up neatly.
+    # pylint: disable=broad-exception-caught
     except Exception as exc:
         _LOGGER.error(f"An error occured when downloading {url}: {repr(exc)}", exc_info=exc)
         # Remove the cache file so we can retry neatly later.
@@ -85,6 +102,8 @@ def download(config: Configuration, filename: str, url: str) -> bool:
         # Attempt to copy the cached file to dump.
         shutil.copy(cache_filepath, dump_filepath)
 
+    # Same as above, we want to catch everything.
+    # pylint: disable=broad-exception-caught
     except Exception as exc:
         _LOGGER.error(f"An error occured when copying {cache_filepath}: {repr(exc)}", exc_info=exc)
         # Remove the files so we can retry neatly later.

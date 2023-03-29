@@ -4,15 +4,12 @@
 import os
 
 from logging import LoggerAdapter
-from types import ModuleType
-from typing import Any
 from typing import Callable
 from typing import Type
 
 # Custom imports.
 from distrodumper import Configuration
 from distrodumper import BaseHelper
-from distrodumper import BaseModuleConfiguration
 from distrodumper.logging import get_logger
 
 from distrodumper.modules import arch
@@ -38,7 +35,10 @@ from distrodumper.validation import is_non_zero_int
 _LOGGER: LoggerAdapter = get_logger("CONFIG_HELPER")
 
 # Formats available for download.
-# TODO: Maybe this should just be dynamically loaded instead of mapped manually?
+# In the future this could be mapped dynamically by just importing every module in the modules
+# submodule and have them contain a dunder property like __module_name__ that can be used to map
+# back to it.
+# But this is easier to maintain since it doesn't delve into dynamic imports.
 __AVAILABLE_MODULES: dict[str, Type[BaseHelper]] = {
     "arch": arch.ArchHelper,
     "example": example.ExampleHelper,
@@ -49,7 +49,7 @@ __AVAILABLE_MODULES: dict[str, Type[BaseHelper]] = {
 
 # Environment-variable to validator mapping. (Required variables)
 __REQUIRED_VALIDATORS: dict[str, Callable] = {
-    "DUMPER_MODULES": lambda val: is_atomic_csv(val, {k for k in __AVAILABLE_MODULES.keys()}),
+    "DUMPER_MODULES": lambda val: is_atomic_csv(val, set(__AVAILABLE_MODULES.keys())),
 }
 
 # Environment-variable to validator mapping. (Optional variables)
@@ -57,7 +57,7 @@ __OPTIONAL_VALIDATORS: dict[str, Callable] = {
     "DUMPER_CACHE": lambda val: is_non_empty_string(val) and os.path.isdir(val),
     "DUMPER_DEBUG": is_bool_string,
     "DUMPER_DIRECTORY": lambda val: is_non_empty_string(val) and os.path.isdir(val),
-    "DUMPER_INTERVAL": lambda val: is_non_zero_int(val),
+    "DUMPER_INTERVAL": is_non_zero_int,
 }
 
 
