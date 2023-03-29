@@ -57,6 +57,12 @@ node ("python3") {
             }
         }
     }
+    stage("Tag") {
+        sshagent(["github_pk"]) {
+            sh "git tag -a v$VERSION_STRING -m \"Tagged by $BUILD_URL\""
+            sh "git push --tags"
+        }
+    }
     stage("Stash") {
         // Stash the files we need to build the Docker image.
         stash(
@@ -80,12 +86,6 @@ node("docker") {
         docker.withRegistry("$REGISTRY_URL") {
             image.push()
             image.push("latest")
-        }
-    }
-    stage("Tag") {
-        sshagent(["github_pk"]) {
-            sh "git tag -a v$VERSION_STRING -m \"Tagged by $BUILD_URL\""
-            sh "git push --tags"
         }
     }
     stage("Clean") {
