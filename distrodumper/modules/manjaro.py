@@ -143,9 +143,6 @@ class ManjaroWorker(BaseWorker):
         result = dict()
         for link in links:
 
-            if link.endswith(".torrent"):
-                print(link)
-
             # Search each link using the regex'.
             match = official_regex.search(link)
             if match:
