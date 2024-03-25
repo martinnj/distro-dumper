@@ -10,7 +10,7 @@ certifi==2023.7.22
     # via requests
 charset-normalizer==2.0.12
     # via requests
-cloudscraper==1.2.60
+cloudscraper==1.2.71
     # via -r requirements.in
 feedparser==6.0.10
     # via -r requirements.in
