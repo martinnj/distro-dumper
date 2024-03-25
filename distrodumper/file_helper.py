@@ -7,7 +7,7 @@ import shutil
 from logging import LoggerAdapter
 
 # 3rd-party imports.
-import requests
+import cloudscraper
 
 # Custom imports.
 from distrodumper import Configuration
@@ -82,7 +82,8 @@ def download(config: Configuration, filename: str, url: str) -> bool:
         # Open a file handle and download the file to cache.
         with open(cache_filepath, "wb") as f_obj:
             # Send the request for the file and raise an exception if we don't get HTTP 200.
-            resp = requests.get(url, allow_redirects=True, timeout=(15,15))
+            scraper = cloudscraper.create_scraper()
+            resp = scraper.get(url, allow_redirects=True, timeout=(15,15))
             resp.raise_for_status()
 
             # Write the response contents to the file.

@@ -88,6 +88,7 @@ class RPiOsWorker(BaseWorker):
         """
 
         candidates = dict()
+        scraper = cloudscraper.create_scraper()
 
         # Construct the index url based on arch and media.
         index_url = f"https://www.raspberrypi.com/software/operating-systems/"
@@ -95,7 +96,7 @@ class RPiOsWorker(BaseWorker):
 
         try:
             # Attempt to get the index, if we can't log and propegate.
-            resp = cloudscraper.get(index_url, allow_redirects=True)
+            resp = scraper.get(index_url, allow_redirects=True)
             resp.raise_for_status()
         except Exception as exc:
             error_message = f"Unable to get index from \"{index_url}\": {repr(exc)}"
