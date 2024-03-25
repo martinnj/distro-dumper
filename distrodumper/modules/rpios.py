@@ -12,7 +12,7 @@ from typing import Any
 from typing import Callable
 
 # 3rd-party imports.
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 
 # Custom imports.
@@ -95,7 +95,7 @@ class RPiOsWorker(BaseWorker):
 
         try:
             # Attempt to get the index, if we can't log and propegate.
-            resp = requests.get(index_url, allow_redirects=True)
+            resp = cloudscraper.get(index_url, allow_redirects=True)
             resp.raise_for_status()
         except Exception as exc:
             error_message = f"Unable to get index from \"{index_url}\": {repr(exc)}"
