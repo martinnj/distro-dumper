@@ -41,7 +41,7 @@ node ("python3") {
                 sh "tox -e cov"
                 // Publist test & coverage reports.
                 junit("reports/xunit.xml")
-                cobertura coberturaReportFile: "reports/cov.xml"
+                recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'reports/cov.xml']])
             }
         }, py310: {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.10") {
