@@ -4,4 +4,4 @@ pytest     # For testing!
 pytest-cov # For getting copverage of testing!
 tox        # For testing in more versions!
 tox-pyenv  # For getting python versions from pyenv.
--r requirements.txt
+-c requirements.txt
