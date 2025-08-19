@@ -38,6 +38,7 @@ node ("python3") {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
                 sh "python --version && pip --version"
                 sh "pip install --upgrade pip"
+                sh "pip install -r requirements-dev.txt"
                 sh "tox -e cov"
                 // Publist test & coverage reports.
                 junit("reports/xunit.xml")
@@ -47,6 +48,7 @@ node ("python3") {
             withPythonEnv("/home/jenkins/.pyenv/shims/python3.12") {
                 sh "python --version && pip --version"
                 sh "pip install --upgrade pip"
+                sh "pip install -r requirements-dev.txt"
                 sh "tox -e py312"
             }
         }
