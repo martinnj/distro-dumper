@@ -15,7 +15,7 @@ node ("python3") {
         sh "mkdir reports"
     }
     stage("Static Analysis") {
-        withPythonEnv("/home/jenkins/.pyenv/shims/python3.9") {
+        withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
             sh "python --version"
             sh "pip --version"
             sh "pip install -r requirements-dev.txt"
@@ -34,26 +34,20 @@ node ("python3") {
     }
     stage("Testing") {
         // TODO: This is really ugly. >_< I would love for "withPythonEnv" to discover pyenv itself.
-        parallel py39: {
-            withPythonEnv("/home/jenkins/.pyenv/shims/python3.9") {
+        parallel py311: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
                 sh "python --version && pip --version"
-                sh "pip install --upgrade pip \"tox<4.0.0\""
+                sh "pip install --upgrade pip"
                 sh "tox -e cov"
                 // Publist test & coverage reports.
                 junit("reports/xunit.xml")
                 recordCoverage(tools: [[parser: 'COBERTURA', pattern: 'reports/cov.xml']])
             }
-        }, py310: {
-            withPythonEnv("/home/jenkins/.pyenv/shims/python3.10") {
+        }, py312: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.12") {
                 sh "python --version && pip --version"
-                sh "pip install --upgrade pip \"tox<4.0.0\""
-                sh "tox -e py310"
-            }
-        }, py311: {
-            withPythonEnv("/home/jenkins/.pyenv/shims/python3.11") {
-                sh "python --version && pip --version"
-                sh "pip install --upgrade pip \"tox<4.0.0\""
-                sh "tox -e py311"
+                sh "pip install --upgrade pip"
+                sh "tox -e py312"
             }
         }
     }
