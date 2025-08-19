@@ -4,21 +4,21 @@
 #
 #    pip-compile requirements.in
 #
-beautifulsoup4==4.11.1
+beautifulsoup4==4.13.4
     # via -r requirements.in
-certifi==2024.7.4
+certifi==2025.8.3
     # via requests
-charset-normalizer==2.0.12
+charset-normalizer==3.4.3
     # via requests
 cloudscraper==1.2.71
     # via -r requirements.in
-feedparser==6.0.10
+feedparser==6.0.11
     # via -r requirements.in
-idna==3.7
+idna==3.10
     # via requests
-pyparsing==3.0.7
+pyparsing==3.2.3
     # via cloudscraper
-requests==2.32.3
+requests==2.32.5
     # via
     #   cloudscraper
     #   requests-toolbelt
@@ -26,7 +26,9 @@ requests-toolbelt==1.0.0
     # via cloudscraper
 sgmllib3k==1.0.0
     # via feedparser
-soupsieve==2.3.2.post1
+soupsieve==2.7
     # via beautifulsoup4
-urllib3==2.2.2
+typing-extensions==4.14.1
+    # via beautifulsoup4
+urllib3==2.5.0
     # via requests
