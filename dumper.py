@@ -38,26 +38,31 @@ def single_run(app_config: Configuration) -> None:
     _LOGGER.info("Running selected dumps.")
     # Loop over all the configured modules.
     for module_name, (module_config, module) in app_config.modules.items():
-        # Create the worker and run it!
-        _LOGGER.debug(f"Creating & running worker for module: {module_name}")
-        worker = module.create_worker(module_config)
-        candidates: dict[str,str] = worker.dump()
+        try:
+            # Create the worker and run it!
+            _LOGGER.debug(f"Creating & running worker for module: {module_name}")
+            worker = module.create_worker(module_config)
+            candidates: dict[str,str] = worker.dump()
 
-        # Check if any candidates are new or we already have them. Do accounting.
-        removed = 0
-        for filename in list(candidates.keys()):
-            if filename in cached_files:
-                removed -=- 1
-                del candidates[filename]
+            # Check if any candidates are new or we already have them. Do accounting.
+            removed = 0
+            for filename in list(candidates.keys()):
+                if filename in cached_files:
+                    removed -=- 1
+                    del candidates[filename]
 
-        errors = 0
-        for filename, url in candidates.items():
-            if not file_helper.download(app_config, filename, url):
-                errors -=- 1
+            errors = 0
+            for filename, url in candidates.items():
+                if not file_helper.download(app_config, filename, url):
+                    errors -=- 1
 
-        _LOGGER.info(f"{module_name}: Downloaded: {len(candidates) - errors}")
-        _LOGGER.info(f"{module_name}: Duplicate: {removed}")
-        _LOGGER.info(f"{module_name}: Errors: {errors}")
+            _LOGGER.info(f"{module_name}: Downloaded: {len(candidates) - errors}")
+            _LOGGER.info(f"{module_name}: Duplicate: {removed}")
+            _LOGGER.info(f"{module_name}: Errors: {errors}")
+        except Exception as exc:  # pylint: disable=broad-except
+            _LOGGER.warning(f"An error occured while running module '{module_name}': {repr(exc)}")
+            _LOGGER.warning(f"Skipping module '{module_name}' and continuing.")
+            continue
 
 
 def main() -> None:
