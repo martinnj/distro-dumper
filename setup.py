@@ -25,7 +25,7 @@ setup(
     ],
 
     license="MIT",
-    description="Simple Python script to automatically dump Linux/BSD Distro files from distrowatch.com's RSS feed.",
+    description="Overengineered Python script and Docker container to automatically dump Linux/BSD torrents from the internet.",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
 )
