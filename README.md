@@ -72,6 +72,13 @@ The `oldstable` releases are not supported.
   `raspios_full_armhf`, `raspios_lite_armhf`, `raspios_arm64`, `raspios_lite_arm64` and `rpd_x86`.
 
 
+### CachyOS
+
+The CachyOS module supports selecting editions currently published on the downloads page.
+
+- `CACHYOS_EDITIONS` - Comma separated list of editions, valid values are `desktop`, `handheld`.
+
+
 ## Development
 
 I've only tested with Python 3.9, but some earlier and all later versions should work as well.

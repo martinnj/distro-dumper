@@ -17,6 +17,7 @@ from distrodumper.modules import debian
 from distrodumper.modules import example
 from distrodumper.modules import manjaro
 from distrodumper.modules import rpios
+from distrodumper.modules import cachyos
 
 from distrodumper.validation import is_atomic_csv
 from distrodumper.validation import is_bool_string
@@ -45,6 +46,7 @@ __AVAILABLE_MODULES: dict[str, Type[BaseHelper]] = {
     "debian": debian.DebianHelper,
     "manjaro": manjaro.ManjaroHelper,
     "raspberry_pi_os": rpios.RPiOsHelper,
+    "cachyos": cachyos.CachyOsHelper,
 }
 
 # Environment-variable to validator mapping. (Required variables)
