@@ -43,6 +43,17 @@ _FILENAME_FORMAT = "archlinux-{year}-{major}-{minor}-x86_64.torrent"
 # Logger to handle console out.
 _LOGGER: LoggerAdapter = get_logger("ARCH_MODULE")
 
+# Default HTTP request settings (only set User-Agent as requested).
+_REQUEST_HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/124.0 Safari/537.36 (+https://github.com/martinnj/distro-dumper)"
+    ),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Connection": "close",
+}
+
 
 ####################################################################################################
 ###                                                                                              ###
@@ -85,7 +96,7 @@ class ArchWorker(BaseWorker):
 
         # Get the Arch Linux release page.
         _LOGGER.debug(f"Requesting release page: {_PAGE_URL}")
-        resp = requests.get(_PAGE_URL)
+        resp = requests.get(_PAGE_URL, headers=_REQUEST_HEADERS)
         if resp.status_code != 200:
             _LOGGER.error("Recieved a non 200 status code from archlinux.org")
             raise ModuleExternalError("Unable to get the release-page from Archlinux.org")
