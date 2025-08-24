@@ -51,6 +51,13 @@ node ("python3") {
                 sh "pip install -r requirements-dev.txt"
                 sh "tox -e py312"
             }
+        }, py313: {
+            withPythonEnv("/home/jenkins/.pyenv/shims/python3.13") {
+                sh "python --version && pip --version"
+                sh "pip install --upgrade pip"
+                sh "pip install -r requirements-dev.txt"
+                sh "tox -e py313"
+            }
         }
     }
     stage("Tag") {

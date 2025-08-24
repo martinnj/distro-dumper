@@ -95,6 +95,7 @@ of the environments:
 
 - `tox -e py311` - Runs the package tests with Python 3.11.
 - `tox -e py312` - Runs the package tests with Python 3.12.
+- `tox -e py313` - Runs the package tests with Python 3.13.
 - `tox -e lint` - Runs pylint and outputs the result.
 - `tox -e cov` - Runs the package tests with the code coverage analysis.
 
