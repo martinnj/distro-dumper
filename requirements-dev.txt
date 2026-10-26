@@ -37,7 +37,7 @@ packaging==26.3
     #   wheel
 pip==26.2.2
     # via pip-tools
-pip-tools==7.5.0
+pip-tools==7.6.2
     # via -r requirements-dev.in
 platformdirs==4.13.5
     # via
