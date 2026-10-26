@@ -34,6 +34,7 @@ packaging==26.3
     #   pytest
     #   tox
     #   virtualenv
+    #   wheel
 pip==26.2.2
     # via pip-tools
 pip-tools==7.5.0
@@ -82,5 +83,5 @@ typing-extensions==4.16.0
     #   tox
 virtualenv==21.14.13
     # via tox
-wheel==0.45.1
+wheel==0.48.0
     # via pip-tools
