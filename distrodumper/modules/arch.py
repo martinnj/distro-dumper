@@ -9,7 +9,7 @@ from logging import LoggerAdapter
 from typing import Callable
 
 # 3rd-party imports.
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 
 # Custom imports.
@@ -96,7 +96,8 @@ class ArchWorker(BaseWorker):
 
         # Get the Arch Linux release page.
         _LOGGER.debug(f"Requesting release page: {_PAGE_URL}")
-        resp = requests.get(_PAGE_URL, headers=_REQUEST_HEADERS)
+        scraper = cloudscraper.create_scraper()
+        resp = scraper.get(_PAGE_URL, headers=_REQUEST_HEADERS)
         if resp.status_code != 200:
             _LOGGER.error("Recieved a non 200 status code from archlinux.org")
             raise ModuleExternalError("Unable to get the release-page from Archlinux.org")
