@@ -44,7 +44,7 @@ platformdirs==4.13.5
     #   pylint
     #   tox
     #   virtualenv
-pluggy==1.6.0
+pluggy==1.7.0
     # via
     #   pytest
     #   pytest-cov
