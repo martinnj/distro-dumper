@@ -16,10 +16,11 @@ coverage[toml]==7.17.0
     # via pytest-cov
 dill==0.4.0
     # via pylint
-distlib==0.4.0
+distlib==0.4.4
     # via virtualenv
 filelock==3.32.7
     # via
+    #   python-discovery
     #   tox
     #   virtualenv
 iniconfig==2.1.0
@@ -34,11 +35,12 @@ packaging==26.3
     #   pyproject-api
     #   pytest
     #   tox
+    #   virtualenv
 pip==26.2.2
     # via pip-tools
 pip-tools==7.5.0
     # via -r requirements-dev.in
-platformdirs==4.3.8
+platformdirs==4.13.5
     # via
     #   pylint
     #   tox
@@ -64,13 +66,15 @@ pytest==9.1.1
     #   pytest-cov
 pytest-cov==7.1.0
     # via -r requirements-dev.in
+python-discovery==1.6.4
+    # via virtualenv
 setuptools==84.2.1
     # via pip-tools
 tomlkit==0.13.3
     # via pylint
 tox==4.28.4
     # via -r requirements-dev.in
-virtualenv==20.34.0
+virtualenv==21.14.13
     # via tox
 wheel==0.45.1
     # via pip-tools
