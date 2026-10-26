@@ -14,7 +14,7 @@ feedparser-sgmllib==2.1.0
     # via feedparser
 idna==3.20
     # via requests
-pyparsing==3.2.3
+pyparsing==3.3.3
     # via cloudscraper
 requests==2.34.2
     # via
