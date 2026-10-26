@@ -6,7 +6,7 @@ build==1.6.1
     # via pip-tools
 cachetools==7.2.5
     # via tox
-click==8.2.1
+click==8.5.0
     # via pip-tools
 colorama==0.4.6
     # via tox
