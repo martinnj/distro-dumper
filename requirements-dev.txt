@@ -73,7 +73,7 @@ setuptools==84.2.1
     # via pip-tools
 tomli-w==1.2.0
     # via tox
-tomlkit==0.13.3
+tomlkit==0.15.2
     # via pylint
 tox==4.67.1
     # via -r requirements-dev.in
