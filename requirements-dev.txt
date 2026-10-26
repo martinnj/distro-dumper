@@ -24,7 +24,7 @@ filelock==3.19.1
     #   virtualenv
 iniconfig==2.1.0
     # via pytest
-isort==6.0.1
+isort==6.1.0
     # via pylint
 mccabe==0.7.0
     # via pylint
