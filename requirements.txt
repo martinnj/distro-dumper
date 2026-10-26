@@ -16,7 +16,7 @@ idna==3.20
     # via requests
 pyparsing==3.2.3
     # via cloudscraper
-requests==2.32.5
+requests==2.34.2
     # via
     #   cloudscraper
     #   requests-toolbelt
