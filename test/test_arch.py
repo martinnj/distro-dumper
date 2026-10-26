@@ -11,6 +11,12 @@ from distrodumper.modules.arch import (
 )
 
 
+def make_scraper(mock_get: Mock):
+    scraper = SimpleNamespace()
+    scraper.get = mock_get
+    return scraper
+
+
 def make_response(status_code: int, text: str):
     return SimpleNamespace(status_code=status_code, text=text)
 
@@ -25,7 +31,9 @@ def test_arch_returns_only_latest_when_get_all_false(monkeypatch: pytest.MonkeyP
 
     mock_resp = make_response(200, html)
     mock_get = Mock(return_value=mock_resp)
-    monkeypatch.setattr("distrodumper.modules.arch.requests.get", mock_get)
+    monkeypatch.setattr(
+        "distrodumper.modules.arch.cloudscraper.create_scraper", lambda: make_scraper(mock_get)
+    )
 
     worker = ArchWorker(ArchConfiguration(get_all=False))
     result = worker.dump()
@@ -50,8 +58,9 @@ def test_arch_returns_all_when_get_all_true(monkeypatch: pytest.MonkeyPatch) -> 
     )
 
     mock_resp = make_response(200, html)
+    mock_get = Mock(return_value=mock_resp)
     monkeypatch.setattr(
-        "distrodumper.modules.arch.requests.get", Mock(return_value=mock_resp)
+        "distrodumper.modules.arch.cloudscraper.create_scraper", lambda: make_scraper(mock_get)
     )
 
     worker = ArchWorker(ArchConfiguration(get_all=True))
@@ -69,8 +78,9 @@ def test_arch_returns_all_when_get_all_true(monkeypatch: pytest.MonkeyPatch) -> 
 
 def test_arch_raises_on_non_200(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_resp = make_response(500, "Server error")
+    mock_get = Mock(return_value=mock_resp)
     monkeypatch.setattr(
-        "distrodumper.modules.arch.requests.get", Mock(return_value=mock_resp)
+        "distrodumper.modules.arch.cloudscraper.create_scraper", lambda: make_scraper(mock_get)
     )
 
     worker = ArchWorker(ArchConfiguration(get_all=False))
@@ -81,8 +91,9 @@ def test_arch_raises_on_non_200(monkeypatch: pytest.MonkeyPatch) -> None:
 def test_arch_handles_no_matches(monkeypatch: pytest.MonkeyPatch) -> None:
     html = '<html><body><a href="/some/other/link">nope</a></body></html>'
     mock_resp = make_response(200, html)
+    mock_get = Mock(return_value=mock_resp)
     monkeypatch.setattr(
-        "distrodumper.modules.arch.requests.get", Mock(return_value=mock_resp)
+        "distrodumper.modules.arch.cloudscraper.create_scraper", lambda: make_scraper(mock_get)
     )
 
     worker = ArchWorker(ArchConfiguration(get_all=True))
